@@ -7,12 +7,32 @@ use core::panic;
 /// Napišite funkcijo `fib`, ki sprejme začetna člena fibbonacijevega zaporedja, število `n` in vrne `n`-ti člen zaporedja
 
 fn fib(a0: u32, a1: u32, n: u32) -> u32 {
-    panic!("Not implemented");
+    let mut prvi_clen = a0;
+    let mut drugi_clen = a1;
+    let mut index = 0;
+    loop {
+        if index >= n {
+            return prvi_clen;
+        }
+        let vsota = prvi_clen + drugi_clen;
+        prvi_clen = drugi_clen;
+        drugi_clen = vsota;
+        index += 1;
+    }
 }
-
 /// ------------------------------------------------------------------------------------------------
 
 /// Napišite funkcijo `je_prestopno`, ki za podano leto preveri, ali je prestopno
+
+fn je_prestopno(leto: u32) -> bool {
+    if leto % 4 != 0 {
+        return false;
+    }
+    if leto % 100 == 0 {
+        return false;
+    }
+    return true;
+}
 
 /// ------------------------------------------------------------------------------------------------
 
@@ -21,6 +41,48 @@ fn fib(a0: u32, a1: u32, n: u32) -> u32 {
 // Dan, mesec, leto
 type Date = (u32, u32, u32);
 
+fn je_veljaven_datum(datum: Date) -> bool {
+    let (dan, mesec, leto) = datum;
+    match mesec {
+        1 | 3 | 5 | 7 | 8 | 10 | 12 => {
+            if dan <= 31 {
+                return true;
+            }
+        }
+        4 | 6 | 9 | 11 => {
+            if dan <= 30 {
+                return true;
+            }
+        }
+        2 => {
+            if je_prestopno(leto) {
+                if dan <= 29 {
+                    return true;
+                } else {
+                    if dan <= 28 {
+                        return true;
+                    }
+                }
+            }
+        }
+        _ => return false,
+    }
+    return false;
+}
+
+fn je_veljaven_datum1(datum: Date) -> bool {
+    let (dan, mesec, leto) = datum;
+    match mesec {
+        1 | 3 | 5 | 7 | 8 | 10 | 12 => 0 < dan <= 31,
+        4 | 6 | 9 | 11 => 0 < dan <= 30,
+        2 => if je_prestopno(leto) {
+            dan <= 29;
+            else 
+            dan <= 28 ;
+        },
+        _ => false
+    }
+}
 /// ------------------------------------------------------------------------------------------------
 
 /// Napišite funkcijo `iteracija(mut start: u32, fun: fn(u32) -> u32, cond: fn(u32) -> bool) -> u32`, ki sprejme iteracijsko funkcijo, zaustavitveni pogoj in začetno vrednost.
@@ -51,9 +113,47 @@ fn bisekcija(mut a: f64, mut b: f64, fun: fn(f64) -> f64, prec: f64) -> f64 {
 /// Če uporabnik vpiše neveljavno število to ni napaka, program za pogoj aritmetičnega zaporedja upošteva samo veljavno vpisana števila.
 
 fn guessing_game() {
-    panic!("Not implemented");
-}
 
+    let mut first: Option<i32> = None;
+    let mut second: Option<i32> = None;
+    let mut diff: Option<i32> = None;
+    println!("Guess the number!");
+
+    loop {
+        println!("Please input your number.");
+
+        let mut guess = String::new();
+
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line");
+
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+
+        match first {
+            Some(n1) => {
+                match second {
+                    Some(n2) => {
+                        if guess - n2 != diff {
+                            println!("vnešeni člen ni naslednji člen aritmetičnega zaporedja");
+                            return;
+                        };
+                        first = second;
+                        second = Some(guess);
+                    },
+                    None => {
+                        second = Some(guess);
+                        diff = Some(guess - n1)
+                    }
+                }
+            },
+            None => first = Some(guess)
+        }
+    }
+}
 /// ------------------------------------------------------------------------------------------------
 /// Napišite funkcijo `fn mat_mul(a: [[u32; 2]; 2], b: [[u32; 2]; 2]) -> [[u32; 2]; 2]`, ki matriki `a` in `b` zmnoži in vrne rezultat
 
@@ -68,13 +168,13 @@ fn ordered(arr: &[u32]) -> bool {
     panic!("Not implemented");
 }
 
-fn vsebuje<T : PartialEq>(v: &Vec<T>, x : &T) -> bool {
+fn vsebuje<T: PartialEq>(v: &Vec<T>, x: &T) -> bool {
     for y in v {
-      if x == y {
-        return true
-      }
+        if x == y {
+            return true;
+        }
     }
-    return false
+    return false;
 }
 
 /// ------------------------------------------------------------------------------------------------
@@ -114,7 +214,9 @@ fn pyramid(n: u32) {
 /// A B C D C B A
 /// Napišite funkcijo `fn selection_sort(mut arr: [u32])`, ki uredi tabelo `arr` z uporabo algoritma urejanja z izbiranjem
 
-fn main() {}
+fn main() {
+    println!("{}", fib(0, 1, 5));
+}
 
 #[cfg(test)]
 mod tests {
@@ -127,6 +229,5 @@ mod tests {
     }
 
     #[test]
-    fn test_fib() {
-    }
+    fn test_fib() {}
 }
