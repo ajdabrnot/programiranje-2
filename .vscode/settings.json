@@ -3,6 +3,11 @@
         "01-uvod-v-rust/predavanja/guessing_game/Cargo.toml",
         // "01-uvod-v-rust/vaje/Cargo.toml",
         // "02-lastnistvo/vaje/Cargo.toml",
+        "03-podatkovni-tipi/predavanja/Cargo.toml",
+        "04-polimorfizem/predavanja/generiki/Cargo.toml",
+        "04-polimorfizem/predavanja/znacilnosti/Cargo.toml",
+        "04-polimorfizem/predavanja/zivljenjskedobe/Cargo.toml",
         // "05-funkcijsko-programiranje/vaje/Cargo.toml",
+        "minirust/Cargo.toml",
     ]
 }
